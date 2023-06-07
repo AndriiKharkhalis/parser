@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 //import * as cors from 'cors';
-import {router} from "./routes"
+import { adminRoutes } from "./routes"
 
 
 dotenv.config();
@@ -45,7 +45,7 @@ router.options('*', cors(options));
 */
 
 
-const app: Express = express();
+const app = express();
 const port = process.env.PORT;
 
 /*app.get('/', (req: Request, res: Response) => {
@@ -56,7 +56,7 @@ app.use('/apiCrm', router)*/
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server!!!!');
 });
-app.use('/', router)
+app.use('/admin', adminRoutes);
 
 
 app.listen(port, () => {
