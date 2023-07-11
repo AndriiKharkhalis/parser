@@ -1,10 +1,16 @@
 import express, { Express, Request, Response } from 'express';
+
 import dotenv from 'dotenv';
-//import * as cors from 'cors';
-import { router } from "./routes"
-
-
 dotenv.config();
+
+
+//import * as cors from 'cors';
+import { UserSchema } from "./DBtest/models/user.schema";
+import { router } from "./routes";
+import { sequelize } from "./DBtest/db";
+// import { config } from './config';
+import { PORT, CLIENT_URL } from "./config/config";
+
 
 // app.use(cors({
 //     credentials: true,
@@ -46,7 +52,29 @@ router.options('*', cors(options));
 
 
 const app = express();
-const port = process.env.PORT;
+// const port = process.env.PORT;
+
+// const sequelize = new Sequelize();
+
+
+const start = async () => {
+    try {
+
+        await sequelize.authenticate();
+        await Promise.all([
+            UserSchema.sync(),
+            // Додайте інші схеми сюди
+        ]);
+        await sequelize.sync();
+
+        app.listen(PORT, () => {
+            console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+        });
+
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 /*app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server!!!!');
@@ -58,7 +86,4 @@ app.get('/', (req: Request, res: Response) => {
 });
 app.use('/', router);
 
-
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
+start()

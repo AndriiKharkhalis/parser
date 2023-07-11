@@ -11,7 +11,8 @@ export const adminRoutes = Router()
 
 
 //export const adminRoutes = () => {
-adminRoutes.get('/index', adminController.index)
+adminRoutes.get('/index', adminController.index);
+adminRoutes.get('/users', adminController.getAllUsers);
 
 // adminRoutes.get('/index', (req: Request, res: Response) => {
 //         res.send('admin/index');
