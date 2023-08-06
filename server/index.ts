@@ -5,11 +5,12 @@ dotenv.config();
 
 
 //import * as cors from 'cors';
-import { UserSchema } from "./DBtest/models/user.schema";
+// import { UserSchema } from "./DBtest/models/user.schema";
 import { router } from "./routes";
 import { sequelize } from "./DBtest/db";
 // import { config } from './config';
 import { PORT, CLIENT_URL } from "./config/config";
+import User from './interfaces/user.models';
 
 
 // app.use(cors({
@@ -54,17 +55,16 @@ router.options('*', cors(options));
 const app = express();
 // const port = process.env.PORT;
 
-// const sequelize = new Sequelize();
-
+app.use(express.json());
 
 const start = async () => {
     try {
 
         await sequelize.authenticate();
-        await Promise.all([
-            UserSchema.sync(),
-            // Додайте інші схеми сюди
-        ]);
+        // await Promise.all([
+        //     User.sync(),
+        //     // Додайте інші схеми сюди
+        // ]);
         await sequelize.sync();
 
         app.listen(PORT, () => {
