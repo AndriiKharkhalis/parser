@@ -17,6 +17,7 @@ adminRoutes.post('/registration', userMiddlewares.chekIsEmailDuplicate,
                                   adminController.registration);
 
 adminRoutes.get('/:userIndex', adminController.getUserById);
+adminRoutes.put('/:userIndex', adminController.updateUser);
 adminRoutes.post('/login', adminController.login);
 adminRoutes.get('/auth', adminController.chek);
 

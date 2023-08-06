@@ -4,7 +4,7 @@ import User from "../interfaces/user.models";
 import { ApiError } from "../error/ApiError";
 
 class AdminController {
-    async registration(req: Request, res: Response, next: NextFunction){
+    async registration (req: Request, res: Response, next: NextFunction){
             try {
               const createUser = await User.create(req.body);
         
@@ -15,7 +15,7 @@ class AdminController {
             }
     }
 
-    async getUserById  (req: Request, res: Response, next: NextFunction) {
+    async getUserById (req: Request, res: Response, next: NextFunction) {
         try {
           const { userIndex } = req.params;
           const user = await User.findOne({where: {id: userIndex}});
@@ -29,6 +29,26 @@ class AdminController {
         } catch (e) {
           next(e);
         }
+      }
+
+      async updateUser (req: Request, res: Response, next: NextFunction) {
+        try {
+          const { userIndex } = req.params;
+  
+          const user = await User.findByPk(userIndex);
+  
+          if (!user) {
+              next(new ApiError(`User with ID ${userIndex} not found`, 404));
+              return;
+          }
+  
+          await user.update(req.body);
+  
+          res.json(user);
+      } catch (e) {
+          next(e);
+      }
+
       }
 
     async login(req: Request, res: Response){
