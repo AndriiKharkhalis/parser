@@ -1,10 +1,17 @@
 import express, { Express, Request, Response } from 'express';
+
 import dotenv from 'dotenv';
-//import * as cors from 'cors';
-import {router} from "./routes"
-
-
 dotenv.config();
+
+
+//import * as cors from 'cors';
+// import { UserSchema } from "./DBtest/models/user.schema";
+import { router } from "./routes";
+import { sequelize } from "./DBtest/db";
+// import { config } from './config';
+import { PORT, CLIENT_URL } from "./config/config";
+import User from './interfaces/user.models';
+
 
 // app.use(cors({
 //     credentials: true,
@@ -45,8 +52,29 @@ router.options('*', cors(options));
 */
 
 
-const app: Express = express();
-const port = process.env.PORT;
+const app = express();
+// const port = process.env.PORT;
+
+app.use(express.json());
+
+const start = async () => {
+    try {
+
+        await sequelize.authenticate();
+        // await Promise.all([
+        //     User.sync(),
+        //     // Додайте інші схеми сюди
+        // ]);
+        await sequelize.sync();
+
+        app.listen(PORT, () => {
+            console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+        });
+
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 /*app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server!!!!');
@@ -56,9 +84,6 @@ app.use('/apiCrm', router)*/
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server!!!!');
 });
-app.use('/', router)
+app.use('/', router);
 
-
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
+start()
